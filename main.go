@@ -2,6 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"log"
+	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -12,6 +15,11 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
+
+	csvHandlers "github.com/AshwinShukla72/csv-processor/handlers"
+	"github.com/AshwinShukla72/csv-processor/repositories"
+	"github.com/AshwinShukla72/csv-processor/services"
+	"github.com/AshwinShukla72/csv-processor/utils"
 )
 
 func main() {
@@ -53,6 +61,30 @@ func main() {
 	// Add a readiness endpoint at /readyz
 	app.Use(healthcheck.New())
 
+	store := repositories.NewStore("files")
+	jobs := repositories.NewRedisQueue("localhost:6379")
+	parser := services.NewCSVParser()
+
+	// Start background worker to process jobs
+	go jobs.Worker(store, parser)
+
+	app.Post("/API/upload", csvHandlers.UploadHandler(store, jobs, parser))
+	app.Get("/API/download/:id", csvHandlers.DownloadHandler(store, jobs))
 	// Start the server on port 3000, No env at the moment
-	app.Listen(":3000")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+
+	// Start the Fiber app in a separate goroutine to avoid blocking the main thread.
+	go func() {
+		addr := ":" + port
+		if err := app.Listen(addr); err != nil {
+			// If the server fails to start, log the error and terminate the application
+			log.Fatalf("failed to start server: %v", err)
+		}
+	}()
+
+	// Listen for termination signals (e.g., SIGINT, SIGTERM) and gracefully shut down the server.
+	utils.GracefulShutdown(app, 5*time.Second)
 }
