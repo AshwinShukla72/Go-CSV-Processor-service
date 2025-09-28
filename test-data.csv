@@ -1,0 +1,11 @@
+name,contact,department,notes
+John Doe,john.doe@company.com,Engineering,Senior developer with expertise in Go
+Jane Smith,+1-555-0123,Marketing,"Handles social media campaigns, jane.smith@company.com is her work email"
+Bob Johnson,bob.johnson@external.org,Sales,External consultant
+Alice Brown,555-0199,HR,Contact via phone only
+Mike Wilson,mike.wilson@company.com,Engineering,Junior developer learning Fiber
+Sarah Davis,sarah@personal.net,Finance,Uses personal email
+Tom Anderson,,Operations,No contact information available
+Linda Garcia,linda.garcia@company.com;backup@company.com,Support,Multiple contact methods
+David Lee,david.lee@temp.com,Engineering,Temporary contractor
+Emma Taylor,emma.taylor@company.com,Design,UI/UX specialist
