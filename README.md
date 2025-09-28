@@ -1,4 +1,4 @@
-# Go Fiber High-Throughput File Upload Backend
+# Go Fiber File Upload Backend
 
 ## Overview
 
