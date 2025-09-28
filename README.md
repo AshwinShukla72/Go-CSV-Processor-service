@@ -16,3 +16,6 @@ It exposes two main endpoints:
 - Concurrent background worker processing CSV files
 - Simple regex email validation
 - Unit and integration test examples included
+
+## Server:
+- Use make commands to run tests & start server.
