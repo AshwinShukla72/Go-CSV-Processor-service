@@ -19,3 +19,6 @@ It exposes two main endpoints:
 
 ## Server:
 - Use make commands to run tests & start server.
+
+## Note:
+- Redis installation on the local system is necessary for correct working of this service.
